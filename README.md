@@ -24,6 +24,17 @@ I’ll also include a simple **user-data** script so EC2 instances run a basic w
 
 ---
 
+## Load Testing for Auto Scaling
+
+To demonstrate Auto Scaling in action, we generate artificial CPU load on the EC2 instances.  
+This triggers the Target Tracking Scaling Policy (based on average CPU utilization) and causes the Auto Scaling Group to scale up.
+
+### Steps
+1. SSH into one of the running EC2 instances in the Auto Scaling Group:
+   ```bash
+   ssh -i <your-key>.pem ubuntu@<public-ip-of-instance>
+   ```
+
 ## Manual console steps (AWS Management Console)
 
 > Assumes you have AWS console access, a VPC with public subnets, and permission to create EC2, ALB, ASG, IAM resources.
@@ -501,22 +512,3 @@ terraform destroy
 * Use small instance types (`t3.micro`) and low max sizes for testing.
 
 ---
-
-# Optional improvements (future steps)
-
-* Use **HTTPS** on ALB via ACM certificate and listener on port 443.
-* Push the web app image to **ECR**, and pull from Launch Template (or use ECS/EKS instead of raw EC2).
-* Use **Lifecycle hooks** to gracefully deregister instances before termination.
-* Add **SSM** (System Manager) with instance role for secure shell-less access.
-* Deploy using **Launch Configuration + User data** to bootstrap application from private registry (with instance role or secrets).
-* Replace Target Type `instance` with `ip` if you want to register containers running on Fargate/Pods.
-
----
-
-If you want, I can:
-
-* Provide a **Terraform variant** that uses a separate **Launch Configuration** or **user-data that pulls from ECR**.
-* Provide a **CloudFormation template** instead.
-* Generate a **detailed test plan** (curl commands and how to generate load to trigger scale up).
-
-Which of these would you like next?
