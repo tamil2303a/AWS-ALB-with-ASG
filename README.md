@@ -139,10 +139,10 @@ I’ll also include a simple **user-data** script so EC2 instances run a basic w
      ```
 
      3. Monitor scaling events:
-        AWS Console → EC2 → Auto Scaling Groups → Activity Or use CLI:
-        ```bash
-        aws autoscaling describe-scaling-activities --auto-scaling-group-name <asg-name>
-        ```
+     AWS Console → EC2 → Auto Scaling Groups → Activity Or use CLI:
+     ```bash
+     aws autoscaling describe-scaling-activities --auto-scaling-group-name <asg-name>
+     ```
      4. Once CPU load decreases (or after you terminate extra instances), the ASG will scale down.
 
 8. **Optional: Create CloudWatch alarms / advanced scaling**
@@ -240,12 +240,12 @@ systemctl restart nginx
 Below is a **complete single `main.tf` Terraform script** (self-contained) you can tweak and run. It provisions an ALB + Target Group + Listener + Launch Template + Auto Scaling Group + security groups + IAM instance profile. It uses the default VPC and its public subnets (suitable for quick tests). **Adjust variables** before running.
 
 > **Important:** Review variables (`key_name`, `allowed_ssh_cidr`, `region`) and replace defaults. Running this will create AWS resources that may incur cost.
-[Terraform script: main.tf](main.tf)
 
 ### How to run the Terraform script
 
 1. Save the above as `main.tf` in a new folder.
-2. Set variables (optional) create `terraform.tfvars`:
+[Terraform script: main.tf](main.tf)
+3. Set variables (optional) create `terraform.tfvars`:
 
 ```hcl
 aws_region      = "us-east-1"
