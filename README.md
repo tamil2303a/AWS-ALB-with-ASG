@@ -1,4 +1,4 @@
-Nice — let’s build a complete guide for **“AWS Application Load Balancer (ALB) with Auto Scaling Group (ASG)”** in two parts:
+**“AWS Application Load Balancer (ALB) with Auto Scaling Group (ASG)”** in two parts:
 
 1. **Manual (console & CLI) step-by-step** — good to understand the components and for one-off deployments.
 2. **Automation with Terraform** — production/ repeatable approach (single Terraform script you can run).
@@ -112,6 +112,43 @@ This triggers the Target Tracking Scaling Policy (based on average CPU utilizati
      * EC2 → Target Groups → Select `tg-demo` → Targets → Wait for healthy status
    * Visit the ALB DNS name in browser (`http://<alb-dns>`) → you should see the HTML page (shows instance id)
    * If you scale up/down (set ASG desired capacity or trigger load), you should see more instances registered by Target Group.
+  
+8. **Load Testing for Auto Scaling**
+
+   * To demonstrate Auto Scaling in action, we generate artificial CPU load on the EC2 instances.
+     This triggers the Target Tracking Scaling Policy (based on average CPU utilization) and causes the Auto Scaling Group to scale up.
+     ### Steps
+     1. SSH into one of the running EC2 instances in the Auto Scaling Group:
+     ```bash
+     ssh -i <your-key>.pem ubuntu@<public-ip-of-instance>
+     ```
+
+     2. [Upload or create the CPU stress script. Example Python script](cpu_stress.py):
+     ```python
+     import multiprocessing
+     import time
+     
+     def cpu_load():
+         while True:
+             pass
+     
+     if __name__ == "__main__":
+         for _ in range(multiprocessing.cpu_count()):
+             p = multiprocessing.Process(target=cpu_load)
+             p.start()
+         time.sleep(600)  # run for 10 minutes
+     ```
+     Run the script:
+     ```bash
+     python3 cpu_stress.py
+     ```
+
+     3. Monitor scaling events:
+        AWS Console → EC2 → Auto Scaling Groups → Activity Or use CLI:
+        ```bash
+        aws autoscaling describe-scaling-activities --auto-scaling-group-name <asg-name>
+        ```
+     4. Once CPU load decreases (or after you terminate extra instances), the ASG will scale down.
 
 8. **Optional: Create CloudWatch alarms / advanced scaling**
 
