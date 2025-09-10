@@ -24,11 +24,6 @@ I’ll also include a simple **user-data** script so EC2 instances run a basic w
 
 ---
 
-## Load Testing for Auto Scaling
-
-To demonstrate Auto Scaling in action, we generate artificial CPU load on the EC2 instances.  
-This triggers the Target Tracking Scaling Policy (based on average CPU utilization) and causes the Auto Scaling Group to scale up.
-
 ### Steps
 1. SSH into one of the running EC2 instances in the Auto Scaling Group:
    ```bash
